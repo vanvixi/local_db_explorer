@@ -1,5 +1,6 @@
-import 'package:flutter/foundation.dart';
+
 import '../core/db_adapter.dart';
+import '../utils/logger.dart';
 
 /// Adapter for Hive databases.
 ///
@@ -27,14 +28,14 @@ class HiveAdapter extends DBAdapter {
   @override
   String get name => _hiveName;
 
+  static const Object _tag = HiveAdapter;
+
   @override
   Future<List<String>> listCollections() async {
     try {
       return _boxes.keys.toList();
     } catch (e) {
-      if (kDebugMode) {
-        print('Error listing Hive collections: $e');
-      }
+      Logger.e(_tag,'Error listing Hive collections: $e');
       return [];
     }
   }
@@ -48,9 +49,7 @@ class HiveAdapter extends DBAdapter {
     try {
       final box = _boxes[collection];
       if (box == null) {
-        if (kDebugMode) {
-          print('Hive box $collection not found');
-        }
+        Logger.i(_tag, 'Hive box $collection not found');
         return [];
       }
 
@@ -92,9 +91,7 @@ class HiveAdapter extends DBAdapter {
 
       return data;
     } catch (e) {
-      if (kDebugMode) {
-        print('Error getting data from Hive collection $collection: $e');
-      }
+      Logger.e(_tag, 'Error getting data from Hive collection $collection: $e');
       return [];
     }
   }
@@ -118,9 +115,7 @@ class HiveAdapter extends DBAdapter {
       // Put the value in the box
       await _putBoxValue(box, key, cleanRecord);
     } catch (e) {
-      if (kDebugMode) {
-        print('Error putting data to Hive collection $collection: $e');
-      }
+      Logger.e(_tag, 'Error putting data to Hive collection $collection: $e');
       rethrow;
     }
   }
@@ -140,9 +135,7 @@ class HiveAdapter extends DBAdapter {
 
       await _deleteBoxValue(box, key);
     } catch (e) {
-      if (kDebugMode) {
-        print('Error deleting from Hive collection $collection: $e');
-      }
+      Logger.e(_tag, 'Error deleting from Hive collection $collection: $e');
       rethrow;
     }
   }
@@ -163,9 +156,7 @@ class HiveAdapter extends DBAdapter {
       }
       return [];
     } catch (e) {
-      if (kDebugMode) {
-        print('Error getting box keys: $e');
-      }
+      Logger.e(_tag, 'Error getting box keys: $e');
       return [];
     }
   }
@@ -175,9 +166,7 @@ class HiveAdapter extends DBAdapter {
     try {
       return box.get(key);
     } catch (e) {
-      if (kDebugMode) {
-        print('Error getting box value for key $key: $e');
-      }
+      Logger.e(_tag, 'Error getting box value for key $key: $e');
       return null;
     }
   }
@@ -187,9 +176,7 @@ class HiveAdapter extends DBAdapter {
     try {
       await box.put(key, value);
     } catch (e) {
-      if (kDebugMode) {
-        print('Error putting box value for key $key: $e');
-      }
+      Logger.e(_tag, 'Error putting box value for key $key: $e');
       rethrow;
     }
   }
@@ -199,9 +186,7 @@ class HiveAdapter extends DBAdapter {
     try {
       await box.delete(key);
     } catch (e) {
-      if (kDebugMode) {
-        print('Error deleting box value for key $key: $e');
-      }
+      Logger.e(_tag, 'Error deleting box value for key $key: $e');
       rethrow;
     }
   }

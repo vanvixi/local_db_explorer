@@ -1,5 +1,5 @@
-import 'package:flutter/foundation.dart';
 import '../core/db_adapter.dart';
+import '../utils/logger.dart';
 
 /// Adapter for SharedPreferences.
 ///
@@ -18,6 +18,8 @@ class SharedPreferencesAdapter extends DBAdapter {
 
   @override
   String get name => _prefsName;
+
+  static const Object _tag = SharedPreferencesAdapter;
 
   @override
   Future<List<String>> listCollections() async {
@@ -66,9 +68,7 @@ class SharedPreferencesAdapter extends DBAdapter {
 
       return data;
     } catch (e) {
-      if (kDebugMode) {
-        print('Error getting SharedPreferences data: $e');
-      }
+      Logger.e(_tag, 'Error getting SharedPreferences data: $e');
       return [];
     }
   }
@@ -88,9 +88,7 @@ class SharedPreferencesAdapter extends DBAdapter {
       // Set the value based on its type
       await _setValue(key, value, type);
     } catch (e) {
-      if (kDebugMode) {
-        print('Error putting SharedPreferences data: $e');
-      }
+      Logger.e(_tag, 'Error putting SharedPreferences data: $e');
       rethrow;
     }
   }
@@ -112,9 +110,7 @@ class SharedPreferencesAdapter extends DBAdapter {
 
       await _removeKey(keyString);
     } catch (e) {
-      if (kDebugMode) {
-        print('Error deleting SharedPreferences key: $e');
-      }
+      Logger.e(_tag, 'Error deleting SharedPreferences key: $e');
       rethrow;
     }
   }
@@ -132,9 +128,7 @@ class SharedPreferencesAdapter extends DBAdapter {
     try {
       return _prefs.getKeys();
     } catch (e) {
-      if (kDebugMode) {
-        print('Error getting SharedPreferences keys: $e');
-      }
+      Logger.e(_tag, 'Error getting SharedPreferences keys: $e');
       return <String>{};
     }
   }
@@ -144,9 +138,7 @@ class SharedPreferencesAdapter extends DBAdapter {
     try {
       return _prefs.get(key);
     } catch (e) {
-      if (kDebugMode) {
-        print('Error getting SharedPreferences value for key $key: $e');
-      }
+      Logger.e(_tag, 'Error getting SharedPreferences value for key $key: $e');
       return null;
     }
   }
@@ -239,9 +231,7 @@ class SharedPreferencesAdapter extends DBAdapter {
           }
       }
     } catch (e) {
-      if (kDebugMode) {
-        print('Error setting SharedPreferences value for key $key: $e');
-      }
+      Logger.e(_tag, 'Error setting SharedPreferences value for key $key: $e');
       rethrow;
     }
   }
@@ -251,9 +241,7 @@ class SharedPreferencesAdapter extends DBAdapter {
     try {
       await _prefs.remove(key);
     } catch (e) {
-      if (kDebugMode) {
-        print('Error removing SharedPreferences key $key: $e');
-      }
+      Logger.e(_tag, 'Error removing SharedPreferences key $key: $e');
       rethrow;
     }
   }

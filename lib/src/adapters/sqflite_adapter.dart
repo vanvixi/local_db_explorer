@@ -1,5 +1,5 @@
-import 'package:flutter/foundation.dart';
 import '../core/db_adapter.dart';
+import '../utils/logger.dart';
 
 /// Adapter for Sqflite databases.
 ///
@@ -20,6 +20,8 @@ class SqfliteAdapter extends DBAdapter {
   @override
   String get name => _databaseName;
 
+  static const Object _tag = SqfliteAdapter;
+
   @override
   Future<List<String>> listCollections() async {
     try {
@@ -30,9 +32,7 @@ class SqfliteAdapter extends DBAdapter {
 
       return tables.map((table) => table['name'] as String).toList();
     } catch (e) {
-      if (kDebugMode) {
-        print('Error listing collections: $e');
-      }
+      Logger.e(_tag, 'Error listing collections: $e');
       return [];
     }
   }
@@ -64,9 +64,7 @@ class SqfliteAdapter extends DBAdapter {
 
       return results;
     } catch (e) {
-      if (kDebugMode) {
-        print('Error getting data from $collection: $e');
-      }
+      Logger.e(_tag, 'Error getting data from $collection: $e');
       return [];
     }
   }
@@ -115,9 +113,7 @@ class SqfliteAdapter extends DBAdapter {
         }
       }
     } catch (e) {
-      if (kDebugMode) {
-        print('Error putting data to $collection: $e');
-      }
+      Logger.e(_tag, 'Error putting data to $collection: $e');
       rethrow;
     }
   }
@@ -161,9 +157,7 @@ class SqfliteAdapter extends DBAdapter {
         whereArgs: whereArgs,
       );
     } catch (e) {
-      if (kDebugMode) {
-        print('Error deleting from $collection: $e');
-      }
+      Logger.e(_tag, 'Error deleting from $collection: $e');
       rethrow;
     }
   }

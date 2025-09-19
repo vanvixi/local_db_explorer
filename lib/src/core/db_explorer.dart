@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
 import '../ui/inspector_screen.dart';
+import '../utils/logger.dart';
 import 'db_adapter.dart';
 
 /// The main controller for the DBViewer package.
@@ -27,9 +29,7 @@ class DBExplorer {
   /// in the inspector panel.
   static void registerAdapter(DBAdapter adapter) {
     instance._adapters.add(adapter);
-    if (kDebugMode) {
-      print('DBViewer: Registered adapter "${adapter.name}"');
-    }
+    Logger.i(_instance, 'DBViewer: Registered adapter "${adapter.name}"');
   }
 
   /// Removes a registered adapter.
@@ -37,9 +37,7 @@ class DBExplorer {
   /// [adapter] - The adapter to remove
   static void unregisterAdapter(DBAdapter adapter) {
     instance._adapters.remove(adapter);
-    if (kDebugMode) {
-      print('DBViewer: Unregistered adapter "${adapter.name}"');
-    }
+    Logger.i(_instance, 'DBViewer: Unregistered adapter "${adapter.name}"');
   }
 
   /// Removes all registered adapters.
@@ -48,9 +46,7 @@ class DBExplorer {
       adapter.dispose();
     }
     instance._adapters.clear();
-    if (kDebugMode) {
-      print('DBViewer: Cleared all adapters');
-    }
+    Logger.i(_instance, 'DBViewer: Cleared all adapters');
   }
 
   /// Opens the inspector panel.
@@ -60,7 +56,7 @@ class DBExplorer {
   ///
   /// If no adapters are registered, this will show a message to the user.
   static void open([BuildContext? context]) {
-    if (!kDebugMode) {
+    if (!kReleaseMode) {
       // No-op in release mode for security
       return;
     }
@@ -68,10 +64,9 @@ class DBExplorer {
     // Use provided context or try to find one
     final BuildContext? targetContext = context ?? _findContext();
     if (targetContext == null) {
-      if (kDebugMode) {
-        print(
-            'DBViewer: Cannot open - no valid context found. Try calling DBViewer.open(context) with a valid BuildContext.');
-      }
+      Logger.i(_instance,
+          'DBViewer: Cannot open - no valid context found. Try calling DBViewer.open(context) with a valid BuildContext.');
+
       return;
     }
 
@@ -110,9 +105,7 @@ class DBExplorer {
       ),
     );
 
-    if (kDebugMode) {
-      print('DBViewer: Navigated to inspector screen');
-    }
+    Logger.i(_instance, 'DBViewer: Navigated to inspector screen');
   }
 
   /// Finds a valid BuildContext to use for navigation.
@@ -133,9 +126,7 @@ class DBExplorer {
 
       return null;
     } catch (e) {
-      if (kDebugMode) {
-        print('DBViewer: Error finding context: $e');
-      }
+      Logger.e(_instance, 'DBViewer: Error finding context: $e');
       return null;
     }
   }
