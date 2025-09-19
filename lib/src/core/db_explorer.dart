@@ -56,8 +56,8 @@ class DBExplorer {
   ///
   /// If no adapters are registered, this will show a message to the user.
   static void open([BuildContext? context]) {
-    if (!kReleaseMode) {
-      // No-op in release mode for security
+    if (kReleaseMode) {
+      // No-op in release mode for securityPrevent opening explorer in release mode for security
       return;
     }
 
