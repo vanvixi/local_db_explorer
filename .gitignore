@@ -7,3 +7,14 @@
 .kiro/steering/byterover-rules.md
 .qoder/rules/byterover-rules.md
 .augment/rules/byterover-rules.md
+
+.DS_Store
+.idea/
+.vscode/
+build/
+pubspec.lock
+**/build/**
+**/.dart_tool/**
+**/.flutter-plugins*
+example/build/
+example/.dart_tool/
