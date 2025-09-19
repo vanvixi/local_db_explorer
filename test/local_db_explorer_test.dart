@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:local_db_explorer/local_db_explorer.dart';
+import 'package:local_db_explorer/src/utils/logger.dart';
 
 void main() {
   group('DBExplorer', () {
@@ -49,6 +50,20 @@ void main() {
       expect(adapter.supportsWrite, isTrue);
       expect(adapter.supportsPagination, isTrue);
       expect(adapter.name, equals('Mock'));
+    });
+  });
+
+  group('Logger', () {
+    test('should log messages without throwing', () {
+      expect(() => Logger.i('TestTag', 'Info message'), returnsNormally);
+      expect(() => Logger.d('TestTag', 'Debug message'), returnsNormally);
+      expect(() => Logger.e('TestTag', 'Error message'), returnsNormally);
+    });
+
+    test('should handle different tag types', () {
+      expect(() => Logger.i('StringTag', 'Info message'), returnsNormally);
+      expect(() => Logger.i(MockAdapter, 'Info message'), returnsNormally);
+      expect(() => Logger.i(MockAdapter(), 'Info message'), returnsNormally);
     });
   });
 }
